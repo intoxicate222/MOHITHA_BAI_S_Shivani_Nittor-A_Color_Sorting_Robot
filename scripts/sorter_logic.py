@@ -68,8 +68,8 @@ class SorterLogicNode(Node):
 
         self.arm_home_pose = [0.0, math.radians(-35)] 
         self.arm_approach_pickup_pose = [0.0, math.radians(20)] 
-        # === CHANGE 1: Reduced lower offset ===
-        self.arm_lower_for_action_offset_j2 = math.radians(30) # Was 40, try 30 to not bend too much for blue
+        
+        self.arm_lower_for_action_offset_j2 = math.radians(30) 
         
         self.arm_aim_for_ball_j1 = { 
             'red':   math.radians(35),  
@@ -90,12 +90,8 @@ class SorterLogicNode(Node):
         self.publish_all_markers()
         self.set_robot_target_joints(self.arm_home_pose)
 
-    # --- publish_robot_base_tf, animation_step, set_robot_target_joints ---
-    # --- create_sphere_marker, create_box_marker, publish_all_markers ---
-    # (ALL THESE METHODS FROM THE PREVIOUS "TYPO FIXED" VERSION REMAIN THE SAME)
-    # (I'm omitting them here for brevity, but ensure you copy them from the previous complete script,
-    #  especially the animation_step and marker creation with their logging)
-    def publish_robot_base_tf(self): # Unchanged
+    
+    def publish_robot_base_tf(self): 
         t = TransformStamped()
         t.header.stamp = self.get_clock().now().to_msg(); t.header.frame_id = 'world' 
         t.child_frame_id = 'base_footprint'
@@ -106,7 +102,7 @@ class SorterLogicNode(Node):
         self.tf_broadcaster.sendTransform(t)
         self.get_logger().debug(f"TF Pub: Base Pos ({self.current_base_pos.x:.2f},{self.current_base_pos.y:.2f}), Yaw: {math.degrees(self.current_base_yaw):.1f}")
 
-    def animation_step(self): # Unchanged
+    def animation_step(self): 
         if self.current_state in ["DRIVING_TO_PICKUP_AREA", "DRIVING_TO_DROPOFF_ZONE"]: 
             elapsed_time = time.time() - self.action_start_time
             drive_ratio = min(elapsed_time / self.base_drive_total_duration, 1.0)
@@ -175,7 +171,7 @@ class SorterLogicNode(Node):
 
     def timer_callback(self):
         current_time = time.time()
-        # === CHANGE 2: More explicit logging in CHOOSE_OBJECT ===
+        
         if self.current_state == "CHOOSE_OBJECT": 
             self.get_logger().info(f"--- Entering CHOOSE_OBJECT --- next_object_idx_to_process: {self.next_object_idx_to_process}")
             for idx, obj_s in enumerate(self.objects): # Log status of all objects
@@ -198,22 +194,19 @@ class SorterLogicNode(Node):
                 self.action_start_time = current_time
             elif not found_object_this_cycle and self.next_object_idx_to_process >= len(self.objects):
                 self.get_logger().info("All objects sorted. FINISHED."); self.current_state = "FINISHED"
-            else: # Should ideally not be reached if indexing is correct
+            else: 
                 self.get_logger().warn(f"No unsorted object found starting from index {self.next_object_idx_to_process}, but not all seem processed. Resetting index and retrying CHOOSE_OBJECT.")
-                self.next_object_idx_to_process = 0 # Reset index as a fallback
-                self.current_state = "CHOOSE_OBJECT" # Re-try immediately
-            return # Explicit return after handling CHOOSE_OBJECT
+                self.next_object_idx_to_process = 0 
+                self.current_state = "CHOOSE_OBJECT" 
+            return 
 
-        # ... (Rest of the state machine - INIT_SEQUENCE, DRIVING_TO_PICKUP_AREA, etc. -
-        #      remains IDENTICAL to the "Typo Fixed" version from the previous message.
-        #      Ensure the logic for setting 'sorted' flag and incrementing 
-        #      'next_object_idx_to_process' in the placing states is robust.)
+        
         if self.current_state == "INIT_SEQUENCE": 
             self.get_logger().info("State: INIT -> Arm HOME.")
             self.set_robot_target_joints(self.arm_home_pose)
             self.target_base_pos = Point(x=0.0,y=0.0,z=0.0); self.target_base_yaw = 0.0
-            self.current_state = "CHOOSE_OBJECT" # Go directly to choosing
-            # No action_start_time needed here as CHOOSE_OBJECT is immediate
+            self.current_state = "CHOOSE_OBJECT" 
+            
 
         elif self.current_state == "DRIVING_TO_PICKUP_AREA": 
             if current_time - self.action_start_time >= self.base_drive_total_duration:

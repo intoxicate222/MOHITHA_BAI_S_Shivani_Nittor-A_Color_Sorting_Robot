@@ -45,8 +45,8 @@ The `simple_sorter_sim` package contains:
 
 ## Video of Output
 
- A video demonstrating the simulation output can be found at `videos/MOHITHA_BAI_S_Shivani_Nittor_Video.mp4`)
+ A video demonstrating the simulation output can be found at `videos/MOHITHA_BAI_S_Shivani_Nittor_Video.webm`)
 
- 
+
 
 ---

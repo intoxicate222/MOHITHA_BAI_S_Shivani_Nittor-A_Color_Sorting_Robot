@@ -8,9 +8,9 @@ Panels:
         - /Status1
         - /RobotModel1
         - /TF1
-        - /MarkerArray1 # Add this for our objects/boxes
+        - /MarkerArray1 
       Splitter Ratio: 0.5
-    Tree Height: 600 # Adjust as needed
+    Tree Height: 600 
 Visualization Manager:
   Class: ""
   Displays:
@@ -62,38 +62,38 @@ Visualization Manager:
       Update Interval: 0
       Value: true
       Visual Enabled: true
-    - Class: rviz_default_plugins/MarkerArray # For our objects and boxes
+    - Class: rviz_default_plugins/MarkerArray 
       Enabled: true
       Name: MarkerArray
-      Namespaces: # We'll use namespaces to differentiate objects and boxes
+      Namespaces: 
         {}
       Topic:
         Depth: 5
-        Durability Policy: Volatile # Or Transient Local if you want them to persist
+        Durability Policy: Volatile 
         History Policy: Keep Last
-        Reliability Policy: Reliable # Or Transient Local
-        Value: /visualization_marker_array # Default topic for markers
+        Reliability Policy: Reliable 
+        Value: /visualization_marker_array 
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: world # Important!
+    Fixed Frame: world 
     Frame Rate: 30
   Name: root
   Tools:
-    # ... (default tools)
+    
   Value: true
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 3.0 # Adjust as needed
+      Distance: 3.0 
       Focal Point:
         X: 0.5
         Y: 0
         Z: 0.3
-      # ... other view parameters
+      
       Name: Current View
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
 Window Geometry:
-  # ... (your window size and position)
+  
