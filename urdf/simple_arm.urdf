@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<robot name="wheeled_sorter_robot">
+
+  <!-- World Link -->
+  <link name="world"/>
+
+  <!-- Base Footprint: This link represents the robot's position on the ground.
+       It will be moved by TF from our Python node. It has no visual itself. -->
+  <link name="base_footprint"/>
+
+  <joint name="world_to_base_footprint_joint" type="fixed">
+    <parent link="world"/>
+    <child link="base_footprint"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Robot Chassis/Platform Link (Visual) -->
+  <link name="robot_platform">
+    <visual>
+      <geometry>
+        <box size="0.4 0.3 0.1"/> <!-- Length, Width, Height -->
+      </geometry>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/> <!-- Center the box visual slightly above origin -->
+      <material name="dark_grey">
+        <color rgba="0.3 0.3 0.3 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="base_footprint_to_platform_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="robot_platform"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/> <!-- Platform origin same as footprint -->
+  </joint>
+
+  <!-- Wheel Links and Joints (Visual Only - Not Actuated for Teleporting) -->
+  <link name="left_wheel_link">
+    <visual>
+      <geometry>
+        <cylinder radius="0.05" length="0.04"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="1.570795 0 0"/> <!-- Rotate cylinder to be a wheel -->
+      <material name="black">
+        <color rgba="0.1 0.1 0.1 1"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="platform_to_left_wheel_joint" type="fixed">
+    <parent link="robot_platform"/>
+    <child link="left_wheel_link"/>
+    <origin xyz="0.15 0.17 0.0" rpy="0 0 0"/> <!-- x=forward, y=left, z=up from platform center -->
+  </joint>
+
+  <link name="right_wheel_link">
+    <visual>
+      <geometry>
+        <cylinder radius="0.05" length="0.04"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="1.570795 0 0"/>
+      <material name="black"/>
+    </visual>
+  </link>
+  <joint name="platform_to_right_wheel_joint" type="fixed">
+    <parent link="robot_platform"/>
+    <child link="right_wheel_link"/>
+    <origin xyz="0.15 -0.17 0.0" rpy="0 0 0"/> <!-- y is negative for right side -->
+  </joint>
+
+  <link name="back_left_wheel_link">
+    <visual>
+      <geometry><cylinder radius="0.05" length="0.04"/></geometry>
+      <origin xyz="0 0 0" rpy="1.570795 0 0"/> <material name="black"/>
+    </visual>
+  </link>
+  <joint name="platform_to_back_left_wheel_joint" type="fixed">
+    <parent link="robot_platform"/> <child link="back_left_wheel_link"/>
+    <origin xyz="-0.15 0.17 0.0" rpy="0 0 0"/>
+  </joint>
+  <link name="back_right_wheel_link">
+    <visual>
+      <geometry><cylinder radius="0.05" length="0.04"/></geometry>
+      <origin xyz="0 0 0" rpy="1.570795 0 0"/> <material name="black"/>
+    </visual>
+  </link>
+  <joint name="platform_to_back_right_wheel_joint" type="fixed">
+    <parent link="robot_platform"/> <child link="back_right_wheel_link"/>
+    <origin xyz="-0.15 -0.17 0.0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="arm_base_link">
+    <visual>
+      <geometry>
+        <cylinder length="0.1" radius="0.07"/>
+      </geometry>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <material name="grey">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="platform_to_arm_base_joint" type="fixed">
+    <parent link="robot_platform"/>
+    <child link="arm_base_link"/>
+    <origin xyz="0.05 0 0.1" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="joint1" type="revolute">
+    <parent link="arm_base_link"/>
+    <child link="link1"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-3.14" upper="3.14" effort="10" velocity="1.0"/>
+  </joint>
+
+  <link name="link1">
+    <visual>
+      <geometry><box size="0.3 0.05 0.05"/></geometry>
+      <origin xyz="0.15 0 0" rpy="0 0 0"/>
+      <material name="blue_link_material"><color rgba="0.1 0.1 0.8 1"/></material>
+    </visual>
+  </link>
+
+  <joint name="joint2" type="revolute">
+    <parent link="link1"/>
+    <child link="link2"/>
+    <origin xyz="0.3 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.57" upper="1.57" effort="10" velocity="1.0"/>
+  </joint>
+
+  <link name="link2">
+    <visual>
+      <geometry><box size="0.25 0.05 0.05"/></geometry>
+      <origin xyz="0.125 0 0" rpy="0 0 0"/>
+      <material name="green_link_material"><color rgba="0.1 0.8 0.1 1"/></material>
+    </visual>
+  </link>
+
+  <joint name="gripper_joint" type="fixed">
+      <parent link="link2"/>
+      <child link="gripper_link"/>
+      <origin xyz="0.25 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="gripper_link">
+      <visual>
+          <geometry><box size="0.04 0.08 0.04"/></geometry>
+          <material name="grey"/>
+      </visual>
+  </link>
+</robot>
